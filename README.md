@@ -3,13 +3,16 @@
 
 ## Giới thiệu
 
-Xin chào! 🌟 Đây là dự án "Sentence Similarity Finder" sử dụng mô hình `SentenceTransformer` để tìm kiếm những đoạn văn bản tương tự trong bộ dữ liệu mô tả động vật. 🐾
-
+Cái nì gọi là "Sentence Similarity Finder" sử dụng mô hình `SentenceTransformer` để tìm kiếm những đoạn văn bản tương tự trong bộ dữ liệu mô tả động vật. 🐾
+thì đề bài là nhập mô tả về một con vật thì nó sẽ tìm trong data và trả ra các đoạn văn bản có liên quan.
+cái này nó rất là cơ bản, data rất là ít nên là kết quả trả ra ko có chính xác đc 100% đâu nên là chặt chém a nha =)))
+## Nếu dùng Kaggle
+thì chỉ cần copy code dán lên, chọn máy có GPU, cài thư viện, tải file csv lên là đc nha
 ## Cài đặt
 
 ### Bước 1: Chuẩn bị Python
 
-Đảm bảo bạn đã cài đặt Python (>= 3.9.6) trên máy tính của mình. Nếu bạn đang sử dụng Kaggle thì không cần lo lắng về bước này nhé.
+Đảm bảo bạn đã cài đặt Python (>= 3.9.6) trên máy tính của mình. Nếu mn đang sử dụng Kaggle thì không cần lo lắng về bước này.
 
 ### Bước 2: Tạo môi trường ảo
 
@@ -21,16 +24,16 @@ source venv/bin/activate  # Trên Windows, dùng `venv\Scripts\activate`
 
 ### Bước 3: Cài đặt thư viện
 
-Cài đặt các thư viện cần thiết. Nếu gặp lỗi thì hãy kiên nhẫn và thử lại với các phiên bản khác nhau nhé:
+Cài đặt các thư viện cần thiết. Nếu gặp lỗi thì hãy gáng thử lại với các phiên bản khác nhau nha hehe:
 ```sh
 pip install pandas sentence-transformers torch numpy
 ```
 
-## Hướng dẫn sử dụng (đọc kĩ trước khi sử dụng nhé 😄)
+## Hướng dẫn sử dụng (đọc kĩ trước khi sử dụng nha 😄)
 
 ### Bước 1: Chuẩn bị dữ liệu
 
-Đặt file `animals.csv` vào thư mục phù hợp (ví dụ: `/kaggle/input/dataset/animals.csv`). Đường dẫn có thể tùy chỉnh theo ý bạn.
+Đặt file `animals.csv` vào thư mục phù hợp (ví dụ: `/kaggle/input/dataset/animals.csv`). Đường dẫn có thể tùy chỉnh theo ý mn miễn là khớp với vị trí đặt file.
 
 ### Bước 2: Chạy chương trình
 
@@ -133,4 +136,4 @@ if __name__ == '__main__':
 
 ## Liên hệ
 
-Nếu có thắc mắc hay cần hỗ trợ, vui lòng liên hệ qua email: [pmkkhoaminh@gmail.com](mailto:pmkkhoaminh@gmail.com). Mình rất vui lòng giúp đỡ! 💌
+Nếu có thắc mắc hay cần hỗ trợ, vui lòng liên hệ qua email: [pmkkhoaminh@gmail.com](mailto:pmkkhoaminh@gmail.com). Mình rất khó chệu vô cùng 💌
