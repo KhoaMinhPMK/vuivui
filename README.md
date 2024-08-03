@@ -6,8 +6,10 @@
 Cái nì gọi là "Sentence Similarity Finder" sử dụng mô hình `SentenceTransformer` để tìm kiếm những đoạn văn bản tương tự trong bộ dữ liệu mô tả động vật. 🐾
 thì đề bài là nhập mô tả về một con vật thì nó sẽ tìm trong data và trả ra các đoạn văn bản có liên quan.
 cái này nó rất là cơ bản, data rất là ít nên là kết quả trả ra ko có chính xác đc 100% đâu nên là chặt chém a nha =)))
+
 ## Nếu dùng Kaggle
 thì chỉ cần copy code dán lên, chọn máy có GPU, cài thư viện, tải file csv lên là đc nha
+
 ## Cài đặt
 
 ### Bước 1: Chuẩn bị Python
@@ -19,7 +21,7 @@ thì chỉ cần copy code dán lên, chọn máy có GPU, cài thư viện, t�
 Chúng ta sẽ tạo một môi trường ảo để cài đặt các thư viện cần thiết:
 ```sh
 python -m venv venv
-source venv/bin/activate  # Trên Windows, dùng `venv\Scripts\activate`
+source venv/bin/activate  # Trên Windows, dùng `venv\Scriptsctivate`
 ```
 
 ### Bước 3: Cài đặt thư viện
@@ -55,6 +57,8 @@ Mã này sẽ đọc dữ liệu từ file CSV và loại bỏ các hàng có gi
 df = pd.read_csv('/kaggle/input/dataset/animals.csv')
 df = df.dropna(subset=['full_description'])
 ```
+- `df = pd.read_csv('/kaggle/input/dataset/animals.csv')`: Đọc dữ liệu từ file `animals.csv` và lưu vào DataFrame `df`.
+- `df = df.dropna(subset=['full_description'])`: Loại bỏ các hàng có giá trị NaN trong cột `full_description`.
 
 ### Load mô hình
 
@@ -62,6 +66,7 @@ Tải mô hình `SentenceTransformer` để sử dụng cho việc chuyển đ�
 ```python
 model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 ```
+- `model = SentenceTransformer('paraphrase-MiniLM-L6-v2')`: Khởi tạo mô hình `SentenceTransformer` với pre-trained model `paraphrase-MiniLM-L6-v2`.
 
 ### Chuẩn bị dữ liệu và Fine-tuning
 
@@ -71,17 +76,22 @@ model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
    for _, row in df.iterrows():
        train_examples.append(InputExample(texts=[row['full_description'], row['full_description']], label=1.0))
    ```
+   - Tạo danh sách `train_examples` từ các dòng trong DataFrame `df`.
+   - Mỗi phần tử trong `train_examples` là một `InputExample` chứa đoạn văn bản từ cột `full_description`.
 
 2. Đưa dữ liệu vào `DataLoader` để phục vụ quá trình fine-tuning:
    ```python
    train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=32)
    train_loss = losses.CosineSimilarityLoss(model)
    ```
+   - `train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=32)`: Tạo `DataLoader` từ `train_examples` với batch size là 32.
+   - `train_loss = losses.CosineSimilarityLoss(model)`: Sử dụng `CosineSimilarityLoss` để tính toán loss cho quá trình huấn luyện.
 
 3. Fine-tune mô hình với `CosineSimilarityLoss` qua 50 epochs:
    ```python
    model.fit(train_objectives=[(train_dataloader, train_loss)], epochs=50, warmup_steps=100)
    ```
+   - `model.fit(train_objectives=[(train_dataloader, train_loss)], epochs=50, warmup_steps=100)`: Huấn luyện mô hình với dữ liệu từ `train_dataloader`, sử dụng `CosineSimilarityLoss` trong 50 epochs.
 
 ### Chuyển đổi các đoạn văn thành vector
 
@@ -90,6 +100,8 @@ Chuyển các mô tả trong bộ dữ liệu thành vector:
 descriptions = df['full_description'].tolist()
 vectors = model.encode(descriptions, convert_to_tensor=True)
 ```
+- `descriptions = df['full_description'].tolist()`: Chuyển cột `full_description` thành danh sách `descriptions`.
+- `vectors = model.encode(descriptions, convert_to_tensor=True)`: Mã hóa danh sách `descriptions` thành các vector.
 
 ### Hàm tìm vector tương tự
 
@@ -101,6 +113,10 @@ def find_similar_vectors(input_vector, vectors, top_k=4):
     top_k_indices = np.argsort(-similarities_cpu)[:top_k]
     return top_k_indices, similarities_cpu[top_k_indices]
 ```
+- `similarities = util.pytorch_cos_sim(input_vector, vectors)[0]`: Tính toán độ tương đồng cosine giữa `input_vector` và các vector trong `vectors`.
+- `similarities_cpu = similarities.cpu().numpy()`: Chuyển đổi tensor độ tương đồng sang numpy array.
+- `top_k_indices = np.argsort(-similarities_cpu)[:top_k]`: Lấy chỉ số của `top_k` vector có độ tương đồng cao nhất.
+- `return top_k_indices, similarities_cpu[top_k_indices]`: Trả về chỉ số và độ tương đồng của các vector tương tự.
 
 ### Chương trình chính
 
@@ -125,6 +141,9 @@ def main():
         else:
             print("Không có mô tả tương tự nào đạt ngưỡng tương đồng.")
 ```
+- Nhận mô tả ngắn từ người dùng và chuyển thành vector.
+- Tìm các vector tương tự từ danh sách `vectors`.
+- Lọc kết quả dựa trên ngưỡng tương đồng và in ra các mô tả tương tự.
 
 ### Chạy chương trình
 
@@ -133,6 +152,7 @@ Gọi hàm `main` để chạy chương trình:
 if __name__ == '__main__':
     main()
 ```
+- `if __name__ == '__main__': main()`: Kiểm tra nếu script được chạy trực tiếp thì gọi hàm `main`.
 
 ## Liên hệ
 
